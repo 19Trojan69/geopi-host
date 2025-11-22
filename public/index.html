@@ -1,10 +1,162 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>GeoPi Host</title>
-</head>
-<body>
-  <h1>GeoPi läuft!</h1>
-</body>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GeoPi – Unified Test Version v1.0.2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- MapLibre GL -->
+    <link
+      href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
+
+    <!-- Supabase JS (UMD) -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2.48.0/dist/umd/supabase.min.js"></script>
+
+    <!-- Pi SDK -->
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+    <!-- GeoPi Styles -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="logo-title">
+          <span class="logo">GeoPi 🔍</span>
+          <div class="subtitle">
+            Unified Test Version <span class="version">v1.0.2</span><br />
+            Eine Version für Domain, Vercel &amp; Pi App Studio
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button id="test-payment-btn" class="btn primary">
+            Testzahlung 0.01 Test-Pi
+          </button>
+          <button id="pi-browser-hint" class="btn ghost" disabled>
+            Kein Pi-Browser (Zahlungen deaktiviert)
+          </button>
+          <button id="menu-toggle" class="btn circle">
+            ☰
+          </button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside id="sidebar" class="sidebar">
+          <h2>Filter &amp; Info</h2>
+
+          <div class="panel-section">
+            <label for="category-select">Kategorie</label>
+            <select id="category-select">
+              <option value="all">Alle Kategorien</option>
+              <option value="merchant">Händler</option>
+              <option value="service">Dienstleister</option>
+              <option value="event">Events</option>
+              <option value="atm">ATM / Wechsel</option>
+              <option value="other">Sonstiges</option>
+            </select>
+          </div>
+
+          <div class="panel-section">
+            <label for="search-input">Suche</label>
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Name, Stadt, Land..."
+            />
+          </div>
+
+          <div class="panel-section">
+            <button id="locate-me-btn" class="btn full">
+              📍 Meinen Standort zentrieren
+            </button>
+          </div>
+
+          <div class="panel-section status">
+            <div id="status-supabase" class="status-item">
+              Supabase: <span class="badge badge-pending">Prüfe...</span>
+            </div>
+            <div id="status-pi" class="status-item">
+              Pi SDK: <span class="badge badge-pending">Prüfe...</span>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h3>Neue Location registrieren</h3>
+            <p class="small">
+              Händler, Dienstleister oder Veranstalter können hier eingetragen
+              werden. In dieser Testversion werden Einträge direkt in die
+              Supabase-Tabelle <code>places</code> geschrieben.
+            </p>
+            <button id="open-register-form" class="btn full secondary">
+              ➕ Jetzt hinzufügen
+            </button>
+          </div>
+
+          <div id="register-form" class="panel-section form hidden">
+            <h3>Location hinzufügen (Testnet)</h3>
+            <label>Name
+              <input id="form-name" type="text" />
+            </label>
+            <label>Stadt
+              <input id="form-city" type="text" />
+            </label>
+            <label>Land
+              <input id="form-country" type="text" />
+            </label>
+            <label>Kategorie
+              <select id="form-category">
+                <option value="merchant">Händler</option>
+                <option value="service">Dienstleister</option>
+                <option value="event">Event</option>
+                <option value="atm">ATM / Wechsel</option>
+                <option value="other">Sonstiges</option>
+              </select>
+            </label>
+            <label>Beschreibung
+              <textarea id="form-description" rows="3"></textarea>
+            </label>
+            <button id="form-use-map-coords" class="btn ghost small">
+              Koordinaten von Kartenmitte übernehmen
+            </button>
+            <button id="form-submit" class="btn full primary">
+              Standort speichern (Test)
+            </button>
+            <p id="form-message" class="small"></p>
+          </div>
+        </aside>
+
+        <section class="map-container">
+          <div id="map"></div>
+
+          <div class="map-overlay bottom-left">
+            <button id="toggle-style" class="btn small">
+              🗺️ Ansicht wechseln (Hell/Sat)
+            </button>
+          </div>
+
+          <div class="map-overlay bottom-right">
+            <div class="legend">
+              <span class="dot merchant"></span> Händler
+              <span class="dot service"></span> Dienstleister
+              <span class="dot event"></span> Event
+              <span class="dot atm"></span> ATM
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>GeoPi – Global Utility Map (Testnet)</span>
+        <span>Domain: geopi.app · Hosting: Cloudflare Pages · Supabase · MapLibre</span>
+      </footer>
+    </div>
+
+    <!-- GeoPi Logic -->
+    <script src="app.js"></script>
+  </body>
 </html>
